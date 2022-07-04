@@ -44,7 +44,7 @@ const validateAuthorFields = async function (req, res, next) {
           .status(400)
           .send({ status: false, msg: "What's your last name?" });
 
-          // Validation for title
+      // Validation for title
       let data = ["Mr", "Mrs", "Miss"];
       if (!title)
         return res
@@ -58,7 +58,7 @@ const validateAuthorFields = async function (req, res, next) {
           msg: "Invalid title,selects from 'Mr','Mrs' and 'Miss'",
         });
 
-        // Validation for password
+      // Validation for password
       if (!password)
         return res
           .status(400)
@@ -77,7 +77,7 @@ const validateAuthorFields = async function (req, res, next) {
           msg: "Minimum length should be 8 characters contain one special charcter , one alphabet and one number",
         });
 
-        // Validation for email
+      // Validation for email
       if (!email)
         return res
           .status(400)
@@ -123,7 +123,7 @@ const validateBlogFields = async function (req, res, next) {
           .status(400)
           .send({ status: false, msg: "Title is empty. Please enter" });
 
-          // Validation for body
+      // Validation for body
       if (!body)
         return res.status(400).send({ status: false, msg: "Body is required" });
       else if (body.trim().length == 0)
@@ -131,7 +131,7 @@ const validateBlogFields = async function (req, res, next) {
           .status(400)
           .send({ status: false, msg: "Body is empty. Please enter" });
 
-          // Validation for authorId
+      // Validation for authorId
       if (!authorId)
         return res
           .status(400)
@@ -141,7 +141,7 @@ const validateBlogFields = async function (req, res, next) {
           .status(400)
           .send({ status: false, msg: "Author id is empty. Please enter" });
 
-          // Validation for tags
+      // Validation for tags
       if (!tags)
         return res
           .status(400)
@@ -151,7 +151,7 @@ const validateBlogFields = async function (req, res, next) {
           .status(400)
           .send({ status: false, msg: "Tags are empty. Please enter" });
 
-          // Validation for category
+      // Validation for category
       if (!category)
         return res
           .status(400)
@@ -161,7 +161,7 @@ const validateBlogFields = async function (req, res, next) {
           .status(400)
           .send({ status: false, msg: "Category is empty. Please enter" });
 
-          // Validation for subcategory
+      // Validation for subcategory
       if (!subcategory)
         return res
           .status(400)
