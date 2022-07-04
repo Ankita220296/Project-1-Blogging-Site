@@ -15,6 +15,7 @@ const validateAuthorFields = async function (req, res, next) {
     } else {
       const { fname, lname, title, email, password } = req.body;
 
+      // Validation for first name
       if (!fname)
         return res
           .status(400)
@@ -29,6 +30,7 @@ const validateAuthorFields = async function (req, res, next) {
           .status(400)
           .send({ status: false, msg: "What's your first name?" });
 
+      // Validation for last name
       if (!lname)
         return res
           .status(400)
@@ -42,6 +44,7 @@ const validateAuthorFields = async function (req, res, next) {
           .status(400)
           .send({ status: false, msg: "What's your last name?" });
 
+          // Validation for title
       let data = ["Mr", "Mrs", "Miss"];
       if (!title)
         return res
@@ -55,6 +58,7 @@ const validateAuthorFields = async function (req, res, next) {
           msg: "Invalid title,selects from 'Mr','Mrs' and 'Miss'",
         });
 
+        // Validation for password
       if (!password)
         return res
           .status(400)
@@ -73,6 +77,7 @@ const validateAuthorFields = async function (req, res, next) {
           msg: "Minimum length should be 8 characters contain one special charcter , one alphabet and one number",
         });
 
+        // Validation for email
       if (!email)
         return res
           .status(400)
@@ -84,9 +89,7 @@ const validateAuthorFields = async function (req, res, next) {
       else if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email))
         return res.status(400).send({ status: false, msg: "Invalid email" });
 
-      const emailId = await await authorModel
-        .find()
-        .select({ email: 1, _id: 0 });
+      const emailId = await authorModel.find().select({ email: 1, _id: 0 });
       const emailInData = emailId.map((ele) => ele.email);
       if (emailInData.includes(email))
         return res
@@ -109,6 +112,8 @@ const validateBlogFields = async function (req, res, next) {
       return res.status(400).send({ status: false, msg: "Missing Parameters" });
     } else {
       const { title, body, authorId, tags, category, subcategory } = req.body;
+
+      // Validation for ltitle
       if (!title)
         return res
           .status(400)
@@ -118,6 +123,7 @@ const validateBlogFields = async function (req, res, next) {
           .status(400)
           .send({ status: false, msg: "Title is empty. Please enter" });
 
+          // Validation for body
       if (!body)
         return res.status(400).send({ status: false, msg: "Body is required" });
       else if (body.trim().length == 0)
@@ -125,6 +131,7 @@ const validateBlogFields = async function (req, res, next) {
           .status(400)
           .send({ status: false, msg: "Body is empty. Please enter" });
 
+          // Validation for authorId
       if (!authorId)
         return res
           .status(400)
@@ -134,6 +141,7 @@ const validateBlogFields = async function (req, res, next) {
           .status(400)
           .send({ status: false, msg: "Author id is empty. Please enter" });
 
+          // Validation for tags
       if (!tags)
         return res
           .status(400)
@@ -143,6 +151,7 @@ const validateBlogFields = async function (req, res, next) {
           .status(400)
           .send({ status: false, msg: "Tags are empty. Please enter" });
 
+          // Validation for category
       if (!category)
         return res
           .status(400)
@@ -152,6 +161,7 @@ const validateBlogFields = async function (req, res, next) {
           .status(400)
           .send({ status: false, msg: "Category is empty. Please enter" });
 
+          // Validation for subcategory
       if (!subcategory)
         return res
           .status(400)
@@ -178,15 +188,20 @@ const validateUpdateBlogFields = async function (req, res, next) {
   try {
     const { title, body, tags, subcategory } = req.body;
     let msg = "";
+
+    // Validation for title
     if (!title) msg = "Title is required";
     else if (title.trim().length == 0) msg = "Title is empty. Please enter";
 
+    // Validation for body
     if (!body) msg = "Body is required";
     else if (body.trim().length == 0) msg = "Body is empty. Please enter";
 
+    // Validation for tags
     if (!tags) msg = "Tags are required";
     else if (tags.length == 0) msg = "Tags are empty. Please enter";
 
+    // Validation for subcategory
     if (!subcategory) msg = "subategory is required";
     else if (subcategory.length == 0)
       msg = "Subcategory are empty. Please enter";
@@ -228,7 +243,7 @@ const validateDeleteBlogParam = async function (req, res, next) {
         .send({ status: false, msg: "Blog Id is incorrect" });
     } else if (blog.isDeleted) {
       return res
-        .status(404)
+        .status(200)
         .send({ status: false, msg: "Blog is already deleted" });
     }
   } catch (err) {

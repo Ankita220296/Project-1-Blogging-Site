@@ -4,8 +4,6 @@
 const mongoose = require("mongoose");
 
 
-//....................................Validations for Email and Password ....................//
-
 //................................. Create Schema .........................//
 const authorSchema = new mongoose.Schema(
   {

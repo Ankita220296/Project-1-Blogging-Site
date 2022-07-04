@@ -18,6 +18,7 @@ const createAuthor = async function (req, res) {
 const loginAuthor = async function (req, res) {
   try {
     const email = req.body.email;
+
     const password = req.body.password;
 
     const author = await authorModel.findOne({
