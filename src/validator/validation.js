@@ -4,11 +4,24 @@ const authorModel = require("../models/authorModel");
 const mongoose = require("mongoose");
 const ObjectId = mongoose.Types.ObjectId;
 
+const isValid = function (value) {
+  // Validataion for empty request body
+  if (Object.keys(value).length === 0) return false;
+  else return true;
+};
+
+const isValidValue = function (value) {
+  // Validation for Strings/ Empty strings
+  if (typeof value !== "string") return false;
+  else if (value.trim().length == 0) return false;
+  else return true;
+};
+
 // .......................................Validations for creating authers.......................................//
 const validateAuthorFields = async function (req, res, next) {
   try {
     let data = req.body;
-    if (Object.keys(data).length == 0) {
+    if (!isValid(data)) {
       return res
         .status(400)
         .send({ status: false, msg: "Missing all fields." });
@@ -20,29 +33,21 @@ const validateAuthorFields = async function (req, res, next) {
         return res
           .status(400)
           .send({ status: false, msg: "First Name is required" });
-      else if (/\d+/.test(fname) && fname !== "string")
+      else if (!isValidValue(fname) || /\d/.test(fname))
         return res.status(400).send({
           status: false,
-          msg: "Numbers are not allowed in first name",
+          msg: "First name is in wrong format",
         });
-      else if (fname.trim().length == 0)
-        return res
-          .status(400)
-          .send({ status: false, msg: "What's your first name?" });
 
       // Validation for last name
       if (!lname)
         return res
           .status(400)
           .send({ status: false, msg: "Last Name is required" });
-      else if (/\d+/.test(lname) && lname !== "string")
+      else if (!isValidValue(lname) || /\d/.test(lname))
         return res
           .status(400)
-          .send({ status: false, msg: "Numbers are not allowed in last name" });
-      else if (lname.trim().length == 0)
-        return res
-          .status(400)
-          .send({ status: false, msg: "What's your last name?" });
+          .send({ status: false, msg: "Last name is in wrong format" });
 
       // Validation for title
       let data = ["Mr", "Mrs", "Miss"];
@@ -50,8 +55,10 @@ const validateAuthorFields = async function (req, res, next) {
         return res
           .status(400)
           .send({ status: false, msg: "Title is required" });
-      else if (title.trim().length == 0)
-        return res.status(400).send({ status: false, msg: "Missing title" });
+      else if (!isValidValue(title) || /\d/.test(title))
+        return res
+          .status(400)
+          .send({ status: false, msg: "Title is in wrong format" });
       else if (!data.includes(title))
         return res.status(400).send({
           status: false,
@@ -63,7 +70,7 @@ const validateAuthorFields = async function (req, res, next) {
         return res
           .status(400)
           .send({ status: false, msg: "Password is required" });
-      else if (password.trim().length == 0)
+      else if (!isValidValue(password))
         return res
           .status(400)
           .send({ status: false, msg: "Please enter your password" });
@@ -82,7 +89,7 @@ const validateAuthorFields = async function (req, res, next) {
         return res
           .status(400)
           .send({ status: false, msg: "Email is required" });
-      else if (email.trim().length == 0)
+      else if (!isValidValue(email))
         return res
           .status(400)
           .send({ status: false, msg: "Please enter your email id" });
@@ -108,7 +115,7 @@ const validateBlogFields = async function (req, res, next) {
     let data = req.body;
 
     // If no data found in body
-    if (Object.keys(data).length == 0) {
+    if (!isValid(data)) {
       return res.status(400).send({ status: false, msg: "Missing Parameters" });
     } else {
       const { title, body, authorId, tags, category, subcategory } = req.body;
@@ -118,58 +125,58 @@ const validateBlogFields = async function (req, res, next) {
         return res
           .status(400)
           .send({ status: false, msg: "Title is required" });
-      else if (title.trim().length == 0)
+      else if (!isValidValue(title))
         return res
           .status(400)
-          .send({ status: false, msg: "Title is empty. Please enter" });
+          .send({ status: false, msg: "Title is in wrong format" });
 
       // Validation for body
       if (!body)
         return res.status(400).send({ status: false, msg: "Body is required" });
-      else if (body.trim().length == 0)
+      else if (!isValidValue(body))
         return res
           .status(400)
-          .send({ status: false, msg: "Body is empty. Please enter" });
+          .send({ status: false, msg: "Body is in wrong format" });
 
       // Validation for authorId
       if (!authorId)
         return res
           .status(400)
           .send({ status: false, msg: "Author id is required" });
-      else if (authorId.trim().length == 0)
+      else if (!isValidValue(authorId))
         return res
           .status(400)
-          .send({ status: false, msg: "Author id is empty. Please enter" });
+          .send({ status: false, msg: "Author id is in wrong format" });
 
       // Validation for tags
       if (!tags)
         return res
           .status(400)
           .send({ status: false, msg: "Tags are required" });
-      else if (tags.length == 0)
+      else if (tags.length === 0)
         return res
           .status(400)
-          .send({ status: false, msg: "Tags are empty. Please enter" });
+          .send({ status: false, msg: "Tags are in wrong format" });
 
       // Validation for category
       if (!category)
         return res
           .status(400)
           .send({ status: false, msg: "Category is required" });
-      else if (category.trim().length == 0)
+      else if (!isValidValue(category))
         return res
           .status(400)
-          .send({ status: false, msg: "Category is empty. Please enter" });
+          .send({ status: false, msg: "categories are in wrong format" });
 
       // Validation for subcategory
       if (!subcategory)
         return res
           .status(400)
           .send({ status: false, msg: "subategory is required" });
-      else if (subcategory.length == 0)
+      else if (subcategory.length === 0)
         return res
           .status(400)
-          .send({ status: false, msg: "Subcategory are empty. Please enter" });
+          .send({ status: false, msg: "Subcategory is in wrong format" });
     }
   } catch (err) {
     return res.status(500).send({ status: false, msg: err.message });
@@ -182,7 +189,7 @@ const validateUpdateBlogFields = async function (req, res, next) {
   let data = req.body;
 
   // If no data found in body
-  if (Object.keys(data).length == 0) {
+  if (!isValid(data)) {
     return res.status(400).send({ status: false, msg: "Missing Parameters" });
   }
   try {
@@ -190,21 +197,21 @@ const validateUpdateBlogFields = async function (req, res, next) {
     let msg = "";
 
     // Validation for title
-    if (!title) msg = "Title is required";
-    else if (title.trim().length == 0) msg = "Title is empty. Please enter";
+    if (title && !title) msg = "Title is required";
+    else if (title && !isValidValue(title)) msg = "Title is in wrong format";
 
     // Validation for body
-    if (!body) msg = "Body is required";
-    else if (body.trim().length == 0) msg = "Body is empty. Please enter";
+    if (body && !body) msg = "Body is required";
+    else if (body && !isValidValue(body)) msg = "Body is in wrong format";
 
     // Validation for tags
-    if (!tags) msg = "Tags are required";
-    else if (tags.length == 0) msg = "Tags are empty. Please enter";
+    if (tags && !tags) msg = "Tags are required";
+    else if (tags && tags.length == 0) msg = "Tags are in wrong format";
 
     // Validation for subcategory
-    if (!subcategory) msg = "subategory is required";
-    else if (subcategory.length == 0)
-      msg = "Subcategory are empty. Please enter";
+    if (subcategory && !subcategory) msg = "subategory is required";
+    else if (subcategory && subcategory.length == 0)
+      msg = "Subcategory are in wrong format";
 
     if (msg) return res.status(400).send({ status: false, msg: msg });
 
@@ -256,7 +263,7 @@ const validateDeleteBlogParam = async function (req, res, next) {
 const validateQueryParams = async function (req, res, next) {
   try {
     let data = req.query;
-    if (Object.keys(data).length == 0) {
+    if (!isValid(data)) {
       return res
         .status(400)
         .send({ status: false, msg: "Missing query Parameters" });
@@ -270,7 +277,7 @@ const validateQueryParams = async function (req, res, next) {
 const validateLoginAuthor = async function (req, res, next) {
   try {
     let data = req.body;
-    if (Object.keys(data).length == 0) {
+    if (!isValid(data)) {
       return res
         .status(400)
         .send({ status: false, msg: "Missing all fields." });
@@ -279,10 +286,10 @@ const validateLoginAuthor = async function (req, res, next) {
       let msg = "";
 
       if (!password) msg = "Password is required";
-      else if (password.trim().length == 0) msg = "Please enter your password";
+      else if (!isValidValue(password)) msg = "Please enter your password";
 
       if (!email) msg = "Email is required";
-      else if (email.trim().length == 0) msg = "Enter your Email";
+      else if (!isValidValue(email)) msg = "Enter your Email";
 
       if (msg) {
         return res.status(400).send({ status: false, msg: msg });

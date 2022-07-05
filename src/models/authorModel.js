@@ -35,4 +35,4 @@ const authorSchema = new mongoose.Schema(
 );
 
 //........................................Export Schema..................................//
-module.exports = mongoose.model("Author", authorSchema); //provides an interface to the database like CRUD operation
+module.exports = mongoose.model("Author", authorSchema); 
