@@ -197,20 +197,16 @@ const validateUpdateBlogFields = async function (req, res, next) {
     let msg = "";
 
     // Validation for title
-    if (title && !title) msg = "Title is required";
-    else if (title && !isValidValue(title)) msg = "Title is in wrong format";
+    if (title && !isValidValue(title)) msg = "Title is in wrong format";
 
     // Validation for body
-    if (body && !body) msg = "Body is required";
-    else if (body && !isValidValue(body)) msg = "Body is in wrong format";
+    if (body && !isValidValue(body)) msg = "Body is in wrong format";
 
     // Validation for tags
-    if (tags && !tags) msg = "Tags are required";
-    else if (tags && tags.length == 0) msg = "Tags are in wrong format";
+    if (tags && tags.length == 0) msg = "Tags are in wrong format";
 
     // Validation for subcategory
-    if (subcategory && !subcategory) msg = "subategory is required";
-    else if (subcategory && subcategory.length == 0)
+    if (subcategory && subcategory.length == 0)
       msg = "Subcategory are in wrong format";
 
     if (msg) return res.status(400).send({ status: false, msg: msg });
